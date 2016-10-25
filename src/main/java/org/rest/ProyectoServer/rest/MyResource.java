@@ -27,4 +27,5 @@ public class MyResource {
     public List<Message> getIt() {
         return service.getAllMessages();
     }
+    //Esto
 }
