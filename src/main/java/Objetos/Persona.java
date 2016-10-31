@@ -2,10 +2,13 @@ package Objetos;
 
 public class Persona {
 	String nombre;
-	int edad;
-	public Persona(String nombre, int edad) {
+	String edad;
+	public Persona(String nombre, String edad) {
 		this.nombre = nombre;
 		this.edad = edad;
+	}
+	public Persona(){
+		
 	}
 	public String getNombre() {
 		return nombre;
@@ -13,10 +16,10 @@ public class Persona {
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
-	public int getEdad() {
+	public String getEdad() {
 		return edad;
 	}
-	public void setEdad(int edad) {
+	public void setEdad(String edad) {
 		this.edad = edad;
 	}
 	
