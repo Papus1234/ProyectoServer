@@ -1,5 +1,5 @@
 package org.rest.ProyectoServer.rest;
-
+import javax.json.JsonArray;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -10,7 +10,9 @@ import javax.ws.rs.core.MediaType;
 
 import org.rest.ProyectoServer.manejoXml.ManagerXml;
 import org.rest.ProyectoServer.models.Cheff;
+import org.rest.ProyectoServer.models.Receta;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -18,7 +20,9 @@ import java.util.List;
 import org.rest.ProyectoServer.service.CheffService;
 
 import Objetos.Persona;
-
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.XML;
 @Path("Cheff")
 public class MyResourseCheff {
 	CheffService cheffS=new CheffService();
@@ -38,16 +42,14 @@ public class MyResourseCheff {
 //		return cheffS.getAllCheffs();
 //		
 	}
+	
 	@Path("xmlEscribir")
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Cheff> escribirXml(Cheff cheff){
-		String a=xml.getXstream().toXML(cheff);
-		System.out.println(a+"paso por aqui");
 		try {
-			xml.guardar("primerCheffs.xml",a);
-			
+			cheffS.GuardarCheffxml(cheff);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -71,22 +73,44 @@ public class MyResourseCheff {
 	@Path("{edad}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Cheff buscarCheff(@PathParam("edad")int edad){
+	public Cheff buscarCheff(@PathParam("edad")String edad){
 		
 			return cheffS.searchCheff(edad);
 	}
 	@Path("xml")
 	@GET
-	@Produces(MediaType.TEXT_PLAIN)
+	@Produces(MediaType.APPLICATION_JSON)
 	public String guardarxml(){
+		
+		String text=xml.getTexto();
 		try {
-			xml.guardar("esto.xml", "Esto es aquello ");
-		} catch (IOException e) {
+			System.out.println(text);
+			return XML.toJSONObject(text).toString();
+		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return "si sirvio"+xml.getTexto();
+		return null;
 	}
+	@Path("ObtenerReceta")
+	@GET 
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Receta RecetabuscarReceta(String Nombre){
+		Receta aux=new Receta();
+		return aux;
+	
+	}
+	
+	@Path("/Chat")
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public String postearComentarios(){
+		return "Fue comentado";
+		
+	}
+	
 	
 	
 }

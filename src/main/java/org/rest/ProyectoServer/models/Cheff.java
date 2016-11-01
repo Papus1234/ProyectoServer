@@ -1,10 +1,14 @@
 package org.rest.ProyectoServer.models;
 
+import java.io.Serializable;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement
+import com.thoughtworks.xstream.annotations.XStreamAlias;
 
-public class Cheff {
+@XmlRootElement(name="Cheff")
+@XStreamAlias("Cheff")
+public class Cheff implements Serializable{
 	private String id;
 	private int edad;
 	
