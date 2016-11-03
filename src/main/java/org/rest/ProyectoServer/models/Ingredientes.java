@@ -8,6 +8,46 @@ public class Ingredientes {
 	
 	
 	
+	public List<Ingrediente> getFrutas() {
+		return frutas;
+	}
+
+	public void setFrutas(List<Ingrediente> frutas) {
+		this.frutas = frutas;
+	}
+
+	public List<Ingrediente> getVegetales() {
+		return vegetales;
+	}
+
+	public void setVegetales(List<Ingrediente> vegetales) {
+		this.vegetales = vegetales;
+	}
+
+	public List<Ingrediente> getGranos() {
+		return granos;
+	}
+
+	public void setGranos(List<Ingrediente> granos) {
+		this.granos = granos;
+	}
+
+	public List<Ingrediente> getLacteos() {
+		return lacteos;
+	}
+
+	public void setLacteos(List<Ingrediente> lacteos) {
+		this.lacteos = lacteos;
+	}
+
+	public List<Ingrediente> getCarnes() {
+		return carnes;
+	}
+
+	public void setCarnes(List<Ingrediente> carnes) {
+		this.carnes = carnes;
+	}
+
 	public Ingredientes(){
 		frutas=new ArrayList<>();
 		granos=new ArrayList<>();

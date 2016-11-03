@@ -8,16 +8,20 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.rest.ProyectoServer.manejoXml.ManagerXml;
 import org.rest.ProyectoServer.models.Cheff;
+import org.rest.ProyectoServer.models.Platillo;
+import org.rest.ProyectoServer.models.Receta;
+import org.xml.sax.SAXException;
 
 
 	
 public class CheffService {
 	List<Cheff> a=new ArrayList<>();
 	String archivoIngredientes;
-	ManagerXml xml;
+	public ManagerXml xml;
 	public CheffService(){
 		xml=new ManagerXml();
 		archivoIngredientes="ingredientes";
@@ -27,24 +31,44 @@ public class CheffService {
 			
 		
 	}
+	public List<Platillo>getAllPlatillos() throws ParserConfigurationException, SAXException, IOException{
+		
+		return xml.listaasobtenerCheff("Platillos");
+		
+		
+	}
 	
 	public List<Cheff> getAllCheffs(){
 		return a;
 		
 	}
+	
+	public void guardarReceta(Platillo receta){
+		
+		//xml.GuardarFichero("receta",xml.getXstream().toXML(receta) );
+		
+	}
+	
 	public void addCheff(Cheff c){
 		a.add(c);
 	}
 	public void GuardarCheffxml(Cheff c) throws IOException{
 		String aux=xml.getXstream().toXML(c);
 		
-		xml.GuardarFichero("ccc",aux);
+		//xml.GuardarFichero("ccc",aux);
 		
 	}
-	public Cheff searchCheff(String id){
-		for (int i=0;i<a.size();i++){
-			if (a.get(i).getId()==id){
-				return a.get(i);
+
+	public String LeerCheff (){
+	//	return xml.LeerFichero("ccc");
+		return "";
+	}
+	
+	public Cheff searchCheff(List <Cheff>lisCheff,String busqueda){
+		for (int i=0;i<lisCheff.size();i++){
+			if (lisCheff.get(i).getId()==busqueda){
+				
+				return lisCheff.get(i);
 				
 			}
 			

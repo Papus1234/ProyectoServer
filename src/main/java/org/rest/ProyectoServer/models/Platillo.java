@@ -1,5 +1,9 @@
 package org.rest.ProyectoServer.models;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement(name="Platillo")
+
 public class Platillo {
 	String nombre;
 	Ingredientes ingredientes;
@@ -9,7 +13,19 @@ public class Platillo {
 	Receta receta ;
 	
 	
-	
+	public Platillo(String nombre, Ingredientes ingredientes, String informacion_nutricional, int precio,
+			int tiempo_de_preparacion, Receta receta) {
+		
+		this.nombre = nombre;
+		this.ingredientes = ingredientes;
+		this.informacion_nutricional = informacion_nutricional;
+		this.precio = precio;
+		this.tiempo_de_preparacion = tiempo_de_preparacion;
+		this.receta = receta;
+	}
+	public Platillo(){
+				
+	}
 	public Receta getReceta() {
 		return receta;
 	}

@@ -7,9 +7,12 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 
 import org.rest.ProyectoServer.manejoXml.ManagerXml;
 import org.rest.ProyectoServer.models.Cheff;
+import org.rest.ProyectoServer.models.Platillo;
 import org.rest.ProyectoServer.models.Receta;
 
 import java.io.File;
@@ -18,6 +21,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import org.rest.ProyectoServer.service.CheffService;
+import org.xml.sax.SAXException;
+
+import com.sun.research.ws.wadl.Application;
 
 import Objetos.Persona;
 import org.json.JSONException;
@@ -43,18 +49,42 @@ public class MyResourseCheff {
 //		
 	}
 	
+	@Path("GuardarPlatillo")
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Platillo guardarReceta(Platillo platillo){
+		//cheffS.guardarReceta(receta);
+		return platillo;
+		
+	}
+	@Path("TodosLosPlatillos")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Platillo>getAllPlatillos(){
+		
+		return cheffS.get
+	}
+	
 	@Path("xmlEscribir")
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Cheff> escribirXml(Cheff cheff){
+		
+			try {
+				xml.agregarCheff(cheff, xml.getRutaCheff());
+			} catch (SAXException | IOException | ParserConfigurationException | TransformerException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		try {
-			cheffS.GuardarCheffxml(cheff);
-		} catch (IOException e) {
+			return xml.listaasobtenerCheff(xml.getRutaCheff());
+		} catch (ParserConfigurationException | SAXException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return cheffS.getAllCheffs();
+		return null;
 		
 //		try {
 //			xml.guardar("estoo.xml", txt);
