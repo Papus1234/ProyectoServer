@@ -4,24 +4,33 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Receta {
-	List <String> Pasos;
+	String [] Pasos;
+	String textoPasos;
 	
+	public Receta(String txt){
+		this.textoPasos=txt;
+	}
 	public Receta(){
-		Pasos=new ArrayList<>();
 		
 	}
-	
-	public void adherir_pasos(String p){
-		Pasos.add(p);
+		public String[] hacerPasos(){
+		return this.textoPasos.split(".");
+		
 	}
 
-	public List<String> getPasos() {
-		return Pasos;
-	}
-
-	public void setPasos(List<String> pasos) {
-		Pasos = pasos;
-	}
+		public String[] getPasos() {
+			return Pasos;
+		}
+		public void setPasos(String[] pasos) {
+			Pasos = pasos;
+		}
+		public String getTextoPasos() {
+			return textoPasos;
+		}
+		public void setTextoPasos(String textoPasos) {
+			this.textoPasos = textoPasos;
+		}
+		
 	
 }
  

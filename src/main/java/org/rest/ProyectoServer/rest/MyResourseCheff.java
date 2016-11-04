@@ -34,6 +34,15 @@ public class MyResourseCheff {
 	CheffService cheffS=new CheffService();
 	ManagerXml xml=new ManagerXml();
 	
+	@Path("Platillos")
+	@GET		
+	@Produces(MediaType.TEXT_PLAIN)
+	public List<Platillo> getallPlatillos(){
+		System.out.println("Paso por acaaaa , esto mola papu ");
+		return cheffS.plat;
+//		return cheffS.getAllCheffs();
+//		
+	}
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -61,9 +70,9 @@ public class MyResourseCheff {
 	@Path("TodosLosPlatillos")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Platillo>getAllPlatillos(){
+	public List<Platillo>getAllPlatillos() throws ParserConfigurationException, SAXException, IOException{
 		
-		return cheffS.get
+		return cheffS.getAllPlatillos();
 	}
 	
 	@Path("xmlEscribir")
@@ -105,8 +114,9 @@ public class MyResourseCheff {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Cheff buscarCheff(@PathParam("edad")String edad){
 		
-			return cheffS.searchCheff(edad);
+			return cheffS.searchCheff(this.cheffS.getAllCheffs(),edad);
 	}
+	
 	@Path("xml")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -127,7 +137,7 @@ public class MyResourseCheff {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Receta RecetabuscarReceta(String Nombre){
-		Receta aux=new Receta();
+		Receta aux=new Receta("");;
 		return aux;
 	
 	}

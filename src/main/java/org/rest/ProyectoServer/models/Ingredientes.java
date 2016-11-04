@@ -5,9 +5,23 @@ import java.util.List;
 
 public class Ingredientes {
 	List <Ingrediente> frutas,vegetales,granos,lacteos,carnes;
+	List<Ingrediente>todos;
 	
 	
-	
+	public Ingredientes(List<Ingrediente> frutas, List<Ingrediente> vegetales, List<Ingrediente> granos,
+			List<Ingrediente> lacteos, List<Ingrediente> carnes) {
+		super();
+		this.frutas = frutas;
+		this.vegetales = vegetales;
+		this.granos = granos;
+		this.lacteos = lacteos;
+		this.carnes = carnes;
+	}
+	public Ingredientes(List<Ingrediente>todos){
+		this.todos=todos;
+		
+	}
+
 	public List<Ingrediente> getFrutas() {
 		return frutas;
 	}

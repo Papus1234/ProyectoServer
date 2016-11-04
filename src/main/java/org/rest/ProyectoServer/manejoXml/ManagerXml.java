@@ -182,8 +182,15 @@ public class ManagerXml {
 		        Element nuevaoIngredientes=doc.createElement("Ingredientes");
 		        nuevaoIngredientes.setTextContent(this.xstream.toXML(platillo.getIngredientes()));
 		        
+		        Element nuevaoInfoNutri=doc.createElement("precio");
+		        nuevaoInfoNutri.setTextContent(""+platillo.getInformacion_nutricional());
 		        
-			        
+		        Element nuevaoTiempo=doc.createElement("tiempo");
+		        nuevaoTiempo.setTextContent(""+platillo.getTiempo_de_preparacion());
+		        
+		        Element nuevaReceta=doc.createElement("receta");
+		        nuevaoApellido.setTextContent(this.xstream.toXML(platillo.getReceta()));
+		            
 		        		
 		        nuevaPersona.appendChild(nuevaoNombre);
 		        nuevaPersona.appendChild(nuevaoApellido);
