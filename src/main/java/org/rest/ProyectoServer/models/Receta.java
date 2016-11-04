@@ -3,6 +3,9 @@ package org.rest.ProyectoServer.models;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class Receta {
 	String [] Pasos;
 	String textoPasos;
@@ -13,10 +16,12 @@ public class Receta {
 	public Receta(){
 		
 	}
-		public String[] hacerPasos(){
+	
+	public String[] hacerPasos(){
 		return this.textoPasos.split(".");
 		
 	}
+	
 
 		public String[] getPasos() {
 			return Pasos;

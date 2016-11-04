@@ -1,8 +1,10 @@
 package org.rest.ProyectoServer.models;
 
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-
-@XmlRootElement(name="Platillo")
+import javax.xml.bind.annotation.XmlSeeAlso;
+@XmlSeeAlso(Ingredientes.class)
+@XmlRootElement
 
 public class Platillo {
 	String nombre;
@@ -26,6 +28,7 @@ public class Platillo {
 	public Platillo(){
 				
 	}
+	@XmlElement
 	public Receta getReceta() {
 		return receta;
 	}
@@ -45,7 +48,7 @@ public class Platillo {
 		this.nombre = nombre;
 	}
 
-
+	@XmlElement
 	public Ingredientes getIngredientes() {
 		return ingredientes;
 	}

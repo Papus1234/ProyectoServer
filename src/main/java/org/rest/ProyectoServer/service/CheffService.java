@@ -44,6 +44,7 @@ public class CheffService {
 				"es muy bueno", 2500, 15,
 				new Receta("se cocina el arroz y se le pone pollo.")));
 		
+		ing=new ArrayList<>();
 		
 		ing.add(new Ingrediente("arroz"));
 		ing.add(new Ingrediente("paella"));
@@ -54,6 +55,8 @@ public class CheffService {
 				"excelente", 3000, 15,
 				new Receta("Se pone en arroz en la paella estos se conbinan por hidrolisis. Frijoles se ponen a sofreir . ")));
 		
+		ing=new ArrayList<>();
+		
 		ing.add(new Ingrediente("arroz"));
 		ing.add(new Ingrediente("pollo"));
 		ing.add(new Ingrediente("caldo"));
@@ -61,14 +64,14 @@ public class CheffService {
 		plat.add(new Platillo("Caldo de pollo",new Ingredientes(ing), 
 				"es muy bueno", 2750, 15,
 				new Receta("Se hace el pollo.Se pone en la cazuela .Se hace el caldo .se mezcla el caldo con el pollo")));
-		
+			
 	}
 	public void guardarPlatillo(Platillo platillo) throws TransformerConfigurationException, SAXException, IOException, ParserConfigurationException, TransformerException{
 		xml.agregarPlatillo(platillo, "Platillos");
 		
 	}
 	public List<Platillo>getAllPlatillos() throws ParserConfigurationException, SAXException, IOException{
-		
+		System.out.println(plat.toString()+"esto parsa por iiii");
 		return this.plat;
 		
 		
