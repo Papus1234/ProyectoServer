@@ -211,7 +211,9 @@ public class MyResourseCheff {
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Ingrediente> getAllingredientes(){
 		System.out.println("siiiiii");
-		return cheffS.darTodosLosIngredientes(cheffS.getPlat());
+		List<Ingrediente>aux=cheffS.darTodosLosIngredientes(cheffS.getPlat());
+		
+		return cheffS.ordenarIngrediente(aux);
 		
 	}
 	/////////////

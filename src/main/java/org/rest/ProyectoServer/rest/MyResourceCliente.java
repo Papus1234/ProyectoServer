@@ -69,10 +69,10 @@ import Objetos.Persona;
 			String nombco=ob.getString("nombrePlatillo");
 			String clienNomb=ob.getString("clienteNombre");
 			String priori=ob.getString("priori");
-		//	int eti=ob.getInt("Mesa");
-			//cheffS.getCola().prioridad(new Cliente(clienNomb, eti, priori,nombco));
-			
-		//	System.out.println("Mesa"+eti+"    "+clienNomb);
+			String eti=ob.getString("Mesa");
+			cheffS.getCola().prioridad(new Cliente(clienNomb, Integer.parseInt(eti), priori,nombco));
+			System.out.println("sfs   :v ");
+			System.out.println("Mesa"+eti+"    nombre Cliente:"+clienNomb+" prioridad: "+priori+" pedido: "+nombco);
 			return "e";
 		}
 		@Path("DarOrden")
@@ -88,9 +88,17 @@ import Objetos.Persona;
 		@POST
 		@Consumes(MediaType.APPLICATION_JSON)
 		@Produces(MediaType.APPLICATION_JSON)
-		public String paga(JSONObject ob){
+		public String paga(JSONObject obb){
+			int esto;
+			try {
+				esto = obb.getInt("pago");
 			
-			System.out.println("sdfsdfsdf");
+			System.out.println("El pago fue de "+esto+"Su cambio es de "+(esto-2500));
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 			return "Ha pagado !!";
 		} 
 		@Path("Comentario")
@@ -100,7 +108,7 @@ import Objetos.Persona;
 		public String pcoment(JSONObject ob) throws JSONException{
 			//String come=ob.getString("Coment");
 			
-			return "Ha pagado !!";
+			return "Ha pagado";
 		}
 
 }

@@ -179,6 +179,22 @@ public class CheffService {
 	        }
 	        return lista;
 	    }
+	  public List<Ingrediente> ordenarIngrediente(List<Ingrediente> lista){
+		 Ingrediente c=new Ingrediente();
+		 Ingrediente cc=new Ingrediente();
+		 
+	        for(int i=1;i<lista.size();i++){
+	            for(int j=i;j>0;j--){
+	                if(lista.get(j).getNombre().compareTo(lista.get(j-1).getNombre())<0){
+	                	 Ingrediente temp = lista.get(j-1);
+	                     cc = lista.get(j);
+	                     c = temp;
+	                    
+	                }
+	            } 
+	        }
+	        return lista;
+	    }
 	 public List<Platillo> convertirListaEnlazadaaList(ListaEnlazada<Platillo>pla){
 		 List<Platillo>a=new ArrayList<>();
 		 for (int i =0;i<pla.cuantosElementos();i++){
