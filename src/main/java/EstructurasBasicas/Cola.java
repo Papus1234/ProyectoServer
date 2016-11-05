@@ -1,74 +1,71 @@
 package EstructurasBasicas;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.rest.ProyectoServer.models.Cliente;
 import org.rest.ProyectoServer.models.Orden;
-
 public class Cola {
-	ListaEnlazada<Orden>colaOrdenes;
-	
-	public ListaEnlazada<Orden> getColaOrdenes() {
-		return colaOrdenes;
+	List<Cliente> clientes;
+        
+        public List<Cliente> getClientes() {
+		return clientes;
 	}
-	public void setColaOrdenes(ListaEnlazada<Orden> colaOrdenes) {
-		this.colaOrdenes = colaOrdenes;
+
+
+
+	public void setClientes(List<Cliente> clientes) {
+		this.clientes = clientes;
 	}
-	public Cola(){
-		
-		
-	}
-	public void InsertarCliente(Orden cliente){
-		if (cliente.getCliente().getPrioridad()=="Bronce"){
-			this.insertarBronce(cliente);
-			
-		}
-		if (cliente.getCliente().getPrioridad()=="Platino"){
-			this.insertarBronce(cliente);
-			
-		}
-		if(cliente.getCliente().getPrioridad()=="Oro"){
-			this.insertarOro(cliente);
-		}
-		
-	}
-	public void insertarInicio(Orden cliente){
-		colaOrdenes.introducirDato(0, cliente);
-		
-	}
-	public Orden PopFinal(){
-		
-		return colaOrdenes.devolverDato((colaOrdenes.cuantosElementos()-1));
-		
-	}
-	public void insertarBronce(Orden cliente){
-		this.insertarInicio(cliente);
-		
-	}
-	public void insertarPlatino(Orden cliente){
-		for (int i=0;i<colaOrdenes.cuantosElementos();i++){
-			if (colaOrdenes.devolverDato(i).getCliente().getPrioridad()!="Bronce"){
-				colaOrdenes.introducirDato(i,cliente);
-				
-			}
-		}
-	}
-	
-	public int insertarOro(Orden cliente){
-		for (int i=0;i<colaOrdenes.cuantosElementos();i++){
-			if (colaOrdenes.devolverDato(i).getCliente().getPrioridad()!="Platino" && colaOrdenes.devolverDato(i).getCliente().getPrioridad()!="Bronce" ){
-				colaOrdenes.introducirDato(i,cliente);
-				return i;
-			}
-		}
-		this.colaOrdenes.introducirDato(colaOrdenes.cuantosElementos()-1, cliente);
-		return 0;
-		
-	}
-	
-			
-		
-		
+
+
+
+		public Cola(){
+            clientes= new ArrayList<Cliente>();
+        }
 	
 	
+	
+    public void prioridad(Cliente dato){
+        if("Gold".compareTo(dato.getPrioridad())==0){
+            
+            if(this.clientes.isEmpty()){
+                this.clientes.add(0, dato);
+                
+            }
+            else{
+                for(int i = 0;i<=clientes.size(); i++){
+                    if(i==clientes.size()){
+                        clientes.add(dato);
+                        break;
+                    }
+                    if("Gold".compareTo(this.clientes.get(i).getPrioridad())!=0){
+                      this.clientes.add(i, dato);
+                      break;
+                    }
+                }      
+            }
+        }
+        else if("Plata".compareTo(dato.getPrioridad())==0){
+            if(this.clientes.isEmpty()){
+                this.clientes.add(0,dato); 
+            }
+            else{
+                for(int i = 0;i<=clientes.size(); i++){
+                    if(i==clientes.size()){
+                        clientes.add(dato);
+                        break;
+                    }
+                    if("Gold".compareTo(this.clientes.get(i).getPrioridad())!=0&&"Plata".compareTo(this.clientes.get(i).getPrioridad())!=0) {
+                        this.clientes.add(i, dato);
+                      break;
+                    }
+                }      
+            }
+            
+        }
+        else{
+            clientes.add(dato);
+        }
+}
 }

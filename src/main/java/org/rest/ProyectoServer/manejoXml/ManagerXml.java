@@ -17,6 +17,7 @@ import javax.xml.transform.stream.StreamResult;
 import org.rest.ProyectoServer.models.Cheff;
 import org.rest.ProyectoServer.models.Ingrediente;
 import org.rest.ProyectoServer.models.Ingredientes;
+import org.rest.ProyectoServer.models.Message;
 import org.rest.ProyectoServer.models.Platillo;
 import org.rest.ProyectoServer.models.Receta;
 import org.w3c.dom.DOMException;
@@ -91,6 +92,7 @@ public class ManagerXml {
 		        
 		        return listaPersonas;
 		        }
+		    
 		    public List<Platillo> readXMLPlatillo(String archivo){
 		    	List<Platillo>lisPlatillos=new ArrayList<>();
 		        try {
@@ -196,7 +198,33 @@ public class ManagerXml {
 		    *Este metodo es de https://www.youtube.com/watch?v=eJrlE_03VPQ
 		    *fue escogido por su buena implementacion
 		    */
-		    public void agregarCheff(Cheff persona,String ruta) throws SAXException, IOException, ParserConfigurationException, TransformerConfigurationException, TransformerException{
+		    public ArrayList<Message>listaasobtenerMessage (String ruta)throws ParserConfigurationException, SAXException, IOException{
+			    ArrayList<Message>listaPersonas=new ArrayList<>();
+			        
+			    DocumentBuilderFactory docFactory=DocumentBuilderFactory.newInstance();
+			    DocumentBuilder docBuilder=docFactory.newDocumentBuilder();
+			        
+			    org.w3c.dom.Document doc=docBuilder.parse(new File(path+ruta+".xml"));
+			        doc.getDocumentElement().normalize();
+			        NodeList nodoPersonas=doc.getElementsByTagName("Messsage");
+			        for (int i=0;i<nodoPersonas.getLength();i++){
+			            Node persona=nodoPersonas.item(i);
+			            if (persona.getNodeType()==Node.ELEMENT_NODE){
+			                
+			                Element unElement=(Element) persona;
+			                Message objCheff=new Message();
+			                objCheff.setMessage(obtenerNodoValor("message", unElement));
+			                objCheff.setAuthor(obtenerNodoValor("author", unElement));
+			                
+			                listaPersonas.add(objCheff);
+			            }
+			        }
+			        
+			        
+			        return listaPersonas;
+			        }
+		    
+		    public void agregarMessage(Message persona,String ruta) throws SAXException, IOException, ParserConfigurationException, TransformerConfigurationException, TransformerException{
 		        
 		        DocumentBuilderFactory docFactory=DocumentBuilderFactory.newInstance();
 		     
@@ -210,13 +238,13 @@ public class ManagerXml {
 		        Document doc=docBuilder.parse(new File(path+ruta));
 		        doc.getDocumentElement().normalize();
 		        Node nodoRaiz=doc.getDocumentElement();
-		        Element nuevaPersona=doc.createElement(SCheff);
+		        Element nuevaPersona=doc.createElement("Messsage");
 		        
-		        Element nuevaoNombre=doc.createElement("id");
-		        nuevaoNombre.setTextContent(persona.getId());
+		        Element nuevaoNombre=doc.createElement("message");
+		        nuevaoNombre.setTextContent(persona.getMessage());
 		        
-		        Element nuevaoApellido=doc.createElement("edad");
-		        nuevaoApellido.setTextContent(""+persona.getEdad());
+		        Element nuevaoApellido=doc.createElement("author");
+		        nuevaoApellido.setTextContent(persona.getAuthor());
 		        
 		        nuevaPersona.appendChild(nuevaoNombre);
 		        nuevaPersona.appendChild(nuevaoApellido);
@@ -231,6 +259,7 @@ public class ManagerXml {
 		        StreamResult result=new StreamResult(new File(path+ruta));
 		        transformer.transform(source, result);
 		    }
+		    
 //		    public ArrayList<Platillo>listaobtenerPlatillo (String ruta)throws ParserConfigurationException, SAXException, IOException{
 //			    ArrayList<Platillo>listaPersonas=new ArrayList<>();
 //			        

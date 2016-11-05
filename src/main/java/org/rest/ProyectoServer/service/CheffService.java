@@ -17,6 +17,7 @@ import org.rest.ProyectoServer.models.Cheff;
 import org.rest.ProyectoServer.models.Cliente;
 import org.rest.ProyectoServer.models.Ingrediente;
 import org.rest.ProyectoServer.models.Ingredientes;
+import org.rest.ProyectoServer.models.Message;
 import org.rest.ProyectoServer.models.Orden;
 import org.rest.ProyectoServer.models.Platillo;
 import org.rest.ProyectoServer.models.Receta;
@@ -28,46 +29,25 @@ import EstructurasBasicas.ListaEnlazada;
 import EstructurasBasicas.ListaEnlazada;
 	
 public class CheffService {
-	public List<Platillo>plat=new ArrayList<>();
-	
 	List<Cheff> a=new ArrayList<>();
-	public List<Platillo> getPlat() {
-		return this.plat;
+	public List<Platillo>plat=new ArrayList<>();
+	List<Message>msjList=new ArrayList<>();
+	Cola cola=new Cola();
+	Cliente c=new Cliente("Juan", 2, "Oro", "ArrozconPollo");
+	
+	public Cola getCola() {
+		return cola;
 	}
-	public void setPlat(List<Platillo> plat) {
-		this.plat = plat;
-	}
-	public List<Cheff> getA() {
-		return a;
-	}
-	public void setA(List<Cheff> a) {
-		this.a = a;
-	}
-	public String getArchivoIngredientes() {
-		return archivoIngredientes;
-	}
-	public void setArchivoIngredientes(String archivoIngredientes) {
-		this.archivoIngredientes = archivoIngredientes;
-	}
-	public ManagerXml getXml() {
-		return xml;
-	}
-	public void setXml(ManagerXml xml) {
-		this.xml = xml;
-	}
-	public Cola getLisOrdenes() {
-		return lisOrdenes;
-	}
-	public void setLisOrdenes(Cola lisOrdenes) {
-		this.lisOrdenes = lisOrdenes;
+	public void setCola(Cola cola) {
+		this.cola = cola;
 	}
 	String archivoIngredientes;
 	public ManagerXml xml;
-	public Cola lisOrdenes;
 	
 	public CheffService(){
 		
 		xml=new ManagerXml();
+		cola.getClientes().add(c);
 		archivoIngredientes="ingredientes";
 		a.add(new Cheff("Carlos", 12));
 		a.add(new Cheff("Alfonso", 32));
@@ -77,7 +57,7 @@ public class CheffService {
 		ing.add(new Ingrediente("pollo"));
 		ing.add(new Ingrediente("lomito"));
 		ing.add(new Ingrediente("frijoles"));
-		plat.add(new Platillo("Paella",new Ingredientes(ing), 
+		plat.add(new Platillo("ArrozconPollo",new Ingredientes(ing), 
 				"es muy bueno", 2500, 15,
 				new Receta("se cocina el arroz y se le pone pollo.")));
 		
@@ -98,10 +78,36 @@ public class CheffService {
 		ing.add(new Ingrediente("pollo"));
 		ing.add(new Ingrediente("caldo"));
 		ing.add(new Ingrediente("frijoles"));
-		plat.add(new Platillo("Caldo de pollo",new Ingredientes(ing), 
+		plat.add(new Platillo("Caldodepollo",new Ingredientes(ing), 
 				"es muy bueno", 2750, 15,
 				new Receta("Se hace el pollo.Se pone en la cazuela .Se hace el caldo .se mezcla el caldo con el pollo")));
+		List<Platillo>lis=xml.readXMLPlatillo("platillo");
+		for (int i=0;i<lis.size();i++){
+			System.out.println("esto por "+i);
+			plat.add(lis.get(i));
 			
+		}
+		
+	}
+	public void combinarListas(List<Platillo>lis){
+		List<Platillo>liis=xml.readXMLPlatillo("platillo");
+		for (int i=0;i<lis.size();i++){
+			this.getPlat().add(liis.get(i));
+			
+		}
+		
+	}
+	public List<Ingrediente> darTodosLosIngredientes(List<Platillo>pla){
+		List<Ingrediente>ingre=new ArrayList<>();
+		for (int i=0;i<pla.size();i++){
+			for (int j=0;j<pla.size();j++){
+				
+				ingre.add(pla.get(i).getIngredientes().getTodos().get(j));
+			}
+			
+		}
+		return ingre;
+		
 	}
 	public void guardarPlatillo(Platillo platillo) throws TransformerConfigurationException, SAXException, IOException, ParserConfigurationException, TransformerException{
 		xml.agregarPlatillo(platillo, "Platillos");
@@ -156,17 +162,7 @@ public class CheffService {
 	
 	/////////////////////ACA EMPIEZA ORDEN SERVICE///////////////////////////
 	
-	public ListaEnlazada<Orden> getOrden (){
-		return lisOrdenes.getColaOrdenes();
-		
-	}
 	
-	public void nuevaOrden(Orden cliente){
-		
-		lisOrdenes.InsertarCliente(cliente);
-		
-		
-	}
 	 public List<Platillo> ordenar(List<Platillo> lista){
 		 Platillo c=new Platillo();
 		 Platillo cc=new Platillo();
@@ -227,5 +223,43 @@ public class CheffService {
 		 return null; 
 		 
 	 }
+	 public List<Message> masListaMsj(Message msj){
+		 this.msjList.add(msj);
+		 return msjList;
+		 
+	 }
+	 public List<Message> getMsjList() {
+			return msjList;
+		}
+		public void setMsjList(List<Message> msjList) {
+			this.msjList = msjList;
+		}
+		
+		public List<Platillo> getPlat() {
+			return this.plat;
+		}
+		public void setPlat(List<Platillo> plat) {
+			this.plat = plat;
+		}
+		public List<Cheff> getA() {
+			return a;
+		}
+		public void setA(List<Cheff> a) {
+			this.a = a;
+		}
+		public String getArchivoIngredientes() {
+			return archivoIngredientes;
+		}
+		public void setArchivoIngredientes(String archivoIngredientes) {
+			this.archivoIngredientes = archivoIngredientes;
+		}
+		public ManagerXml getXml() {
+			return xml;
+		}
+		public void setXml(ManagerXml xml) {
+			this.xml = xml;
+		}
+		
+		
 	
 }

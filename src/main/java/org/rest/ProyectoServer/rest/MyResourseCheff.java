@@ -8,10 +8,14 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 
 import org.rest.ProyectoServer.manejoXml.ManagerXml;
 import org.rest.ProyectoServer.models.Cheff;
+import org.rest.ProyectoServer.models.Cliente;
+import org.rest.ProyectoServer.models.Ingrediente;
+import org.rest.ProyectoServer.models.Message;
 import org.rest.ProyectoServer.models.Orden;
 import org.rest.ProyectoServer.models.Platillo;
 import org.rest.ProyectoServer.models.Receta;
@@ -28,23 +32,47 @@ import com.sun.research.ws.wadl.Application;
 
 import EstructurasBasicas.ListaEnlazada;
 import Objetos.Persona;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.XML;
 @Path("Cheff")
 public class MyResourseCheff {
-	CheffService cheffS=new CheffService();
+	public CheffService cheffS=new CheffService();
+	
+	public CheffService getCheffS() {
+		return cheffS;
+	}
+
+
+	public void setCheffS(CheffService cheffS) {
+		this.cheffS = cheffS;
+	}
+
+
+	public ManagerXml getXml() {
+		return xml;
+	}
+
+
+	public void setXml(ManagerXml xml) {
+		this.xml = xml;
+	}
+
+
+
 	ManagerXml xml=new ManagerXml();
 	
 	@Path("Platillos")
 	@GET		
-	@Produces(MediaType.TEXT_PLAIN)
+	@Produces(MediaType.APPLICATION_JSON)
 	public List<Platillo> getallPlatillos(){
 		System.out.println("Paso por acaaaa , esto mola papu ");
 		return cheffS.plat;
 //		return cheffS.getAllCheffs();
 //		
 	}
+	
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -64,13 +92,16 @@ public class MyResourseCheff {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Platillo guardarReceta(Platillo platillo){
+	public Platillo guardarReceta(Platillo platillo) throws ParserConfigurationException, SAXException, IOException{
 		String xml=this.cheffS.xml.getXstream().toXML(platillo);
 		//cheffS.guardarReceta(receta);
+		this.cheffS.getAllPlatillos().add(platillo);
 		System.out.println(xml);
+		
 		return platillo;
 		
 	}
+	
 	@Path("TodosLosPlatillos")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -81,16 +112,12 @@ public class MyResourseCheff {
 	
 	@Path("xmlEscribir")
 	@POST
+	
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Cheff> escribirXml(Cheff cheff){
 		
-			try {
-				xml.agregarCheff(cheff, xml.getRutaCheff());
-			} catch (SAXException | IOException | ParserConfigurationException | TransformerException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		
 		try {
 			return xml.listaasobtenerCheff(xml.getRutaCheff());
 		} catch (ParserConfigurationException | SAXException | IOException e) {
@@ -151,17 +178,41 @@ public class MyResourseCheff {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String postearComentarios(){
-		return "Fue comentado";
-		
-	}
-	///////////////////////////ACA EMPIEZA ORDEN //////////////////////////////////////
-	@Path("EnviarOrden")
-	@POST
-	@Produces(MediaType.APPLICATION_JSON)
-	public ListaEnlazada<Orden> getOrdenes(){
-		return cheffS.getOrden();
-		
+	public Message postearComentarios(Message msj) throws ParserConfigurationException, SAXException, IOException, TransformerConfigurationException, TransformerException{
+		cheffS.getMsjList().add(msj);
+		xml.agregarMessage(msj, "mensajes");
+		System.out.println(msj.getMessage()+"pasa por chat");
+		String aux="";
+		for (int i=0;i<cheffS.getMsjList().size();i++){
+			aux+=cheffS.getMsjList().get(i);
+			
+		}
+		System.out.println(aux);
+		return new Message(aux, "este");
 	}
 	
+	
+	///////////////////////////ACA EMPIEZA ORDEN //////////////////////////////////////
+	@Path("Orden")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public Platillo getOrdenes(){
+		Cliente aux=cheffS.getCola().getClientes().get(0);
+		cheffS.getCola().getClientes().remove(0);
+		
+		return cheffS.busquedaBinaria(cheffS.getPlat(),aux.getNombrePlatillo());
+	}
+	
+	
+	
+	//////////INGREDIENTES///
+	@Path("Ingredientes")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Ingrediente> getAllingredientes(){
+		System.out.println("siiiiii");
+		return cheffS.darTodosLosIngredientes(cheffS.getPlat());
+		
+	}
+	/////////////
 }
