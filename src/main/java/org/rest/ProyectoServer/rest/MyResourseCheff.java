@@ -12,6 +12,7 @@ import javax.xml.transform.TransformerException;
 
 import org.rest.ProyectoServer.manejoXml.ManagerXml;
 import org.rest.ProyectoServer.models.Cheff;
+import org.rest.ProyectoServer.models.Orden;
 import org.rest.ProyectoServer.models.Platillo;
 import org.rest.ProyectoServer.models.Receta;
 
@@ -25,6 +26,7 @@ import org.xml.sax.SAXException;
 
 import com.sun.research.ws.wadl.Application;
 
+import EstructurasBasicas.ListaEnlazada;
 import Objetos.Persona;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -63,7 +65,9 @@ public class MyResourseCheff {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Platillo guardarReceta(Platillo platillo){
+		String xml=this.cheffS.xml.getXstream().toXML(platillo);
 		//cheffS.guardarReceta(receta);
+		System.out.println(xml);
 		return platillo;
 		
 	}
@@ -109,12 +113,13 @@ public class MyResourseCheff {
 //		}
 //		return "No se pudo encontrar el archivo"; 
 	}
+	
 	@Path("{edad}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Cheff buscarCheff(@PathParam("edad")String edad){
-		
-			return cheffS.searchCheff(this.cheffS.getAllCheffs(),edad);
+	public Platillo buscarCheff(@PathParam("edad")String edad) {
+			
+			return cheffS.busquedaBinaria(cheffS.ordenar(cheffS.getPlat()),edad);
 	}
 	
 	@Path("xml")
@@ -142,7 +147,7 @@ public class MyResourseCheff {
 	
 	}
 	
-	@Path("/Chat")
+	@Path("Chat")
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -150,7 +155,13 @@ public class MyResourseCheff {
 		return "Fue comentado";
 		
 	}
-	
-	
+	///////////////////////////ACA EMPIEZA ORDEN //////////////////////////////////////
+	@Path("EnviarOrden")
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	public ListaEnlazada<Orden> getOrdenes(){
+		return cheffS.getOrden();
+		
+	}
 	
 }

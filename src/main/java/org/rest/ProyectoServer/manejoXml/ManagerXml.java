@@ -15,7 +15,11 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.rest.ProyectoServer.models.Cheff;
+import org.rest.ProyectoServer.models.Ingrediente;
+import org.rest.ProyectoServer.models.Ingredientes;
 import org.rest.ProyectoServer.models.Platillo;
+import org.rest.ProyectoServer.models.Receta;
+import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -24,6 +28,7 @@ import org.xml.sax.SAXException;
 
 import com.thoughtworks.xstream.XStream;
 
+import EstructurasBasicas.GenericList;
 import Objetos.Persona;
 
 public class ManagerXml {
@@ -86,6 +91,107 @@ public class ManagerXml {
 		        
 		        return listaPersonas;
 		        }
+		    public List<Platillo> readXMLPlatillo(String archivo){
+		    	List<Platillo>lisPlatillos=new ArrayList<>();
+		        try {
+		            // Parseamos el documento para poder leerlo como un arbol de nodos
+		            DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+		            Document doc = builder.parse(archivo);
+		            
+		            // <platillo> ... </platillo>
+		            // Obtenemos todos los nodos hijos de "restaurant" que tengan la etiqueta "platillo"
+		            NodeList listaPlatillos = doc.getElementsByTagName("platillo");
+		            // Creamos una lista para guardar todos los platillo del restaurant
+		            GenericList<Platillo> listaTodosPlatillos = new GenericList<Platillo>();
+		            // Iteramos por todos los nodos que tienen la etiqueta "platillo" para obtener sus atributos
+		            for(int platilloTemp = 0; platilloTemp < listaPlatillos.getLength(); platilloTemp++){
+		                
+		                // Seleccionamos la cabeza del platillo en el que estamos actualmente, ya que estamos iterando
+		                Element platilloActual = (Element) listaPlatillos.item(platilloTemp);
+		                
+		                // <nombre> ... </nombre>
+		                // Obtenemos el dato que se encuentra en la etiqueta "nombre"
+		                String nombre = platilloActual.getElementsByTagName("nombre").item(0).getTextContent();
+		                System.out.println(nombre);
+		                
+		                // <ingredientes> ... </ingredientes>
+		                // Obtenemos todos los hijos de "ingredientes" que tengan la etiqueta "ingrediente"
+		                NodeList listaIngredientes = platilloActual.getElementsByTagName("ingrediente");    
+		                // Creamos una lista para guardar todos los ingredientes del platillo actual
+		                GenericList<Ingrediente> todosIngredientes = new GenericList<Ingrediente>();
+		                // Iteramos por todos los nodos que tienen la etiqueta "ingrediente" para obtener sus atributos
+		                for(int ingredienteTemp = 0; ingredienteTemp < listaIngredientes.getLength(); ingredienteTemp++){
+		                    
+		                    // <ingrediente> ... </ingrediente>                   
+		                    // Seleccionamos la cabeza del platillo en el que estamos actualmente, ya que estamos iterando
+		                    Element ingredienteActual = (Element) listaIngredientes.item(ingredienteTemp);
+		                    
+		                    // <cantidad> ... </cantidad>
+		                    // Obtenemos el dato que se encuentra en la etiqueta "cantidad"
+		                    String cantidadStr = ingredienteActual.getElementsByTagName("cantidad").item(0).getTextContent();
+		                    int cantidad = Integer.parseInt(cantidadStr.trim());
+		                    System.out.println(cantidad);
+		                    
+		                    // <tipo> ... </tipos>
+		                    // Obtenemos el dato que se encuentra en la etiqueta "tipo"
+		                    String tipo = ingredienteActual.getElementsByTagName("tipo").item(0).getTextContent();
+		                    System.out.println(tipo);
+		                    
+		                    // <nombre> ... </nombre>
+		                    // Obtenemos el dato que se encuentra en la etiqueta "nombre"
+		                    String nombreIngrediente = ingredienteActual.getElementsByTagName("nombreIngrediente").item(0).getTextContent();
+		                    System.out.println(nombreIngrediente);
+		                    
+		                    // Creamos un objeto ingrediente con los datos que acabamos de recolectar
+		                    Ingrediente ingrediente = new Ingrediente(tipo,nombreIngrediente);
+		                    
+		                    // Insertamos el objeto ingrediente en la lista de ingredientes
+		                    todosIngredientes.insertarAlFinal(ingrediente);                                                            
+		                }
+		                // Creamos un objetos ingredientes(lista con cada ingrediente)
+		                Ingredientes ingredientesPlatillo = new Ingredientes((List<Ingrediente>) todosIngredientes);
+		                
+		                // <infoNutri> ... </infoNutri>
+		                // Obtenemos el dato que se encuentra en la etiqueta "infoNutricional"
+		                String infoNutri = platilloActual.getElementsByTagName("informacionNutricional").item(0).getTextContent();
+		                System.out.println(infoNutri);
+		                
+		                // <precio> ... </precio>
+		                // Obtenemos el dato que se encuentra en la etiqueta "precio"
+		                String precioStr = platilloActual.getElementsByTagName("precio").item(0).getTextContent();
+		                int precio = Integer.parseInt(precioStr.trim());
+		                System.out.println(precio);
+		                
+		                // <tiempoPreparacion> ... </tiempoPreparacion>
+		                // Obtenemos el dato que se encuentra en la etiqueta "tiempoPreparacion"
+		                String tiempoStr = platilloActual.getElementsByTagName("tiempoPreparacion").item(0).getTextContent();
+		                int tiempoPreparacion = Integer.parseInt(tiempoStr.trim());
+		                System.out.println(tiempoPreparacion);
+		                
+		                // <receta> ... </receta>
+		                // Obtenemos el dato que se encuentra en la etiqueta "receta"
+		                String recetaText = platilloActual.getElementsByTagName("receta").item(0).getTextContent();  
+		                System.out.println(recetaText);
+		                // Creamos un objeto receta con los pasos de la receta
+		                Receta recetaPlatillo = new Receta(recetaText);
+		                
+		                // Creamos un un objeto platillo con todos los datos recolectados del XML
+		                Platillo nuevoPlatillo = new Platillo(nombre, ingredientesPlatillo, infoNutri, precio, tiempoPreparacion, recetaPlatillo);
+		                lisPlatillos.add(nuevoPlatillo);
+		                System.out.println("Platillo Creado!");
+		                
+		                // Insertamos el platillo que acabamos de crear en la lista de platillos
+		                listaTodosPlatillos.insertarAlFinal(nuevoPlatillo);
+		                System.out.println("Platillo Guardado!");
+		            }                        
+		            return lisPlatillos;
+		        }catch (ParserConfigurationException | SAXException | IOException | DOMException e){
+		            System.err.println("¡Error!");
+		        }
+				return lisPlatillos;
+		        
+		        
+		    }
 		    /*
 		    *Este metodo es de https://www.youtube.com/watch?v=eJrlE_03VPQ
 		    *fue escogido por su buena implementacion
@@ -125,38 +231,38 @@ public class ManagerXml {
 		        StreamResult result=new StreamResult(new File(path+ruta));
 		        transformer.transform(source, result);
 		    }
-		    public ArrayList<Platillo>listaobtenerPlatillo (String ruta)throws ParserConfigurationException, SAXException, IOException{
-			    ArrayList<Platillo>listaPersonas=new ArrayList<>();
-			        
-			    DocumentBuilderFactory docFactory=DocumentBuilderFactory.newInstance();
-			    DocumentBuilder docBuilder=docFactory.newDocumentBuilder();
-			        
-			    org.w3c.dom.Document doc=docBuilder.parse(new File(path+ruta+".xml"));
-			        doc.getDocumentElement().normalize();
-			        NodeList nodoPersonas=doc.getElementsByTagName(this.SPlatillo);
-			        for (int i=0;i<nodoPersonas.getLength();i++){
-			            Node persona=nodoPersonas.item(i);
-			            if (persona.getNodeType()==Node.ELEMENT_NODE){
-			                
-			                Element unElement=(Element) persona;
-			                Platillo objCheff=new Platillo();
-//			                		obtenerNodoValor("nombre", unElement),
-//			                		obtenerNodoValor("ingredientes", unElement), 
-//			                		obtenerNodoValor("informacionNutricional", unElement),
-//			                		
-//			                		Integer.parseInt(obtenerNodoValor("precio", unElement)), 
-//			                		
-//			                				obtenerNodoValor("tiempo_de_preparacion", unElement),
-//			                		obtenerNodoValor("receta", unElement);
+//		    public ArrayList<Platillo>listaobtenerPlatillo (String ruta)throws ParserConfigurationException, SAXException, IOException{
+//			    ArrayList<Platillo>listaPersonas=new ArrayList<>();
+//			        
+//			    DocumentBuilderFactory docFactory=DocumentBuilderFactory.newInstance();
+//			    DocumentBuilder docBuilder=docFactory.newDocumentBuilder();
+//			        
+//			    org.w3c.dom.Document doc=docBuilder.parse(new File(path+ruta+".xml"));
+//			        doc.getDocumentElement().normalize();
+//			        NodeList nodoPersonas=doc.getElementsByTagName(this.SPlatillo);
+//			        for (int i=0;i<nodoPersonas.getLength();i++){
+//			            Node persona=nodoPersonas.item(i);
+//			            if (persona.getNodeType()==Node.ELEMENT_NODE){
 //			                
-			                
-			                listaPersonas.add(objCheff);
-			            }
-			        }
-			        
-			        
-			        return listaPersonas;
-			        }
+//			                Element unElement=(Element) persona;
+//			                Platillo objCheff=new Platillo();
+////			                		obtenerNodoValor("nombre", unElement),
+////			                		obtenerNodoValor("ingredientes", unElement), 
+////			                		obtenerNodoValor("informacionNutricional", unElement),
+////			                		
+////			                		Integer.parseInt(obtenerNodoValor("precio", unElement)), 
+////			                		
+////			                				obtenerNodoValor("tiempo_de_preparacion", unElement),
+////			                		obtenerNodoValor("receta", unElement);
+////			                
+//			                
+//			                listaPersonas.add(objCheff);
+//			            }
+//			        }
+//			        
+//			        
+//			        return listaPersonas;
+//			        }
 		    public void agregarPlatillo(Platillo platillo,String ruta) throws SAXException, IOException, ParserConfigurationException, TransformerConfigurationException, TransformerException{
 		        
 		        DocumentBuilderFactory docFactory=DocumentBuilderFactory.newInstance();

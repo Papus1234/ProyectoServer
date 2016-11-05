@@ -14,20 +14,57 @@ import javax.xml.transform.TransformerException;
 
 import org.rest.ProyectoServer.manejoXml.ManagerXml;
 import org.rest.ProyectoServer.models.Cheff;
+import org.rest.ProyectoServer.models.Cliente;
 import org.rest.ProyectoServer.models.Ingrediente;
 import org.rest.ProyectoServer.models.Ingredientes;
+import org.rest.ProyectoServer.models.Orden;
 import org.rest.ProyectoServer.models.Platillo;
 import org.rest.ProyectoServer.models.Receta;
 import org.xml.sax.SAXException;
 
+import EstructurasBasicas.Cola;
+import EstructurasBasicas.ListaEnlazada;
 
+import EstructurasBasicas.ListaEnlazada;
 	
 public class CheffService {
 	public List<Platillo>plat=new ArrayList<>();
 	
 	List<Cheff> a=new ArrayList<>();
+	public List<Platillo> getPlat() {
+		return this.plat;
+	}
+	public void setPlat(List<Platillo> plat) {
+		this.plat = plat;
+	}
+	public List<Cheff> getA() {
+		return a;
+	}
+	public void setA(List<Cheff> a) {
+		this.a = a;
+	}
+	public String getArchivoIngredientes() {
+		return archivoIngredientes;
+	}
+	public void setArchivoIngredientes(String archivoIngredientes) {
+		this.archivoIngredientes = archivoIngredientes;
+	}
+	public ManagerXml getXml() {
+		return xml;
+	}
+	public void setXml(ManagerXml xml) {
+		this.xml = xml;
+	}
+	public Cola getLisOrdenes() {
+		return lisOrdenes;
+	}
+	public void setLisOrdenes(Cola lisOrdenes) {
+		this.lisOrdenes = lisOrdenes;
+	}
 	String archivoIngredientes;
 	public ManagerXml xml;
+	public Cola lisOrdenes;
+	
 	public CheffService(){
 		
 		xml=new ManagerXml();
@@ -72,7 +109,7 @@ public class CheffService {
 	}
 	public List<Platillo>getAllPlatillos() throws ParserConfigurationException, SAXException, IOException{
 		System.out.println(plat.toString()+"esto parsa por iiii");
-		return this.plat;
+		return this.getPlat();
 		
 		
 	}
@@ -115,5 +152,80 @@ public class CheffService {
 		return null;
 		
 	}
+	
+	
+	/////////////////////ACA EMPIEZA ORDEN SERVICE///////////////////////////
+	
+	public ListaEnlazada<Orden> getOrden (){
+		return lisOrdenes.getColaOrdenes();
+		
+	}
+	
+	public void nuevaOrden(Orden cliente){
+		
+		lisOrdenes.InsertarCliente(cliente);
+		
+		
+	}
+	 public List<Platillo> ordenar(List<Platillo> lista){
+		 Platillo c=new Platillo();
+		 Platillo cc=new Platillo();
+		 
+	        for(int i=1;i<lista.size();i++){
+	            for(int j=i;j>0;j--){
+	                if(lista.get(j).getNombre().compareTo(lista.get(j-1).getNombre())<0){
+	                	 Platillo temp = lista.get(j-1);
+	                     cc = lista.get(j);
+	                     c = temp;
+	                    
+	                }
+	            } 
+	        }
+	        return lista;
+	    }
+	 public List<Platillo> convertirListaEnlazadaaList(ListaEnlazada<Platillo>pla){
+		 List<Platillo>a=new ArrayList<>();
+		 for (int i =0;i<pla.cuantosElementos();i++){
+			 a.add(pla.devolverDato(i));
+			 
+		 }
+		 return a;
+		 
+	 }
+	 public ListaEnlazada<Platillo> convertirListaLEnlazada(List<Platillo>pla){
+		 ListaEnlazada<Platillo>a=new ListaEnlazada<>();
+		 for (int i =0;i<pla.size();i++){
+			 a.insertarUltimo(pla.get(i));
+			 
+		 }
+		 return a;
+		 
+	 }
+	 public Platillo busquedaBinaria(List<Platillo> platillo,String buscar1){
+		 Platillo buscar=new Platillo();
+		 
+		 	 int n = platillo.size();
+			 int centro,inf=0,sup=n-1;
+			 while(inf<=sup){ 
+				 centro=(sup+inf)/2; 
+				 System.out.println(platillo.get(centro).getNombre()+"    "+buscar1);
+					
+				// System.out.println(buscar.getNombre().compareTo(buscar1)<0);
+					 
+				 if(platillo.get(centro).getNombre().equals(buscar1)){
+			 		return platillo.get(centro);
+			 		
+			 		
+			 	}else if(buscar1.compareTo(platillo.get(centro).getNombre())>0 ){
+			 		
+			 		sup=centro-1; 
+			 		} 
+			 	else { 
+			 		inf=centro+1; 
+			 	} 
+			 } 
+		 return null; 
+		 
+	 }
 	
 }

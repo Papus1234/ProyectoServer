@@ -319,7 +319,12 @@ public class ListaEnlazada<T>{
         quitarPrimero();
         return dato;
     }
-
+    
+    public void intercambiar(int pre_data, int post_data){
+        T temp=devolverDato(pre_data);
+        modificarDato(pre_data,devolverDato(post_data));
+        modificarDato(post_data,temp);
+    }
     /**
      * Indica la posición del primer dato que se encuentre
      * @param t dato buscado
